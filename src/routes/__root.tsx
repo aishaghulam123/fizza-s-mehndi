@@ -85,13 +85,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       // WhatsApp/Facebook require an ABSOLUTE url here to render a link preview —
       // replace this with your real deployed domain once the site is live.
-      { property: "og:image", content: "https://your-domain.com/og-image.jpg" },
+      { property: "og:image", content: "https:/fizza-mehndi.netlify.app/og-image.jpg" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
       { property: "og:image:type", content: "image/jpeg" },
       { property: "og:image:alt", content: "Fizza & Abdul Qadir — Mehndi Celebration, 21 October 2026" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: "https://your-domain.com/og-image.jpg" },
+      { name: "twitter:image", content: "https://fizza-mehndi.netlify.app/og-image.jpg" },
     ],
     links: [
       {
