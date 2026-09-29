@@ -85,7 +85,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       // WhatsApp/Facebook require an ABSOLUTE url here to render a link preview —
       // replace this with your real deployed domain once the site is live.
-      { property: "og:image", content: "https:/fizza-mehndi.netlify.app/og-image.jpg" },
+      { property: "og:image", content: "https://fizza-mehndi.netlify.app/og-image.jpg" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
       { property: "og:image:type", content: "image/jpeg" },
