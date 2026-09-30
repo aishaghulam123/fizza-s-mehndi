@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, Instagram, MapPin, MessageCircle, Volume2, VolumeX } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import gateImage from "@/assets/mehndi-garden-gate.jpg";
 import venueImage from "@/assets/secret-garden-venue.jpg";
 import coupleImage from "@/assets/couple-dreamscape.jpg";
@@ -42,6 +42,7 @@ export const Route = createFileRoute("/")({
 });
 
 const petals = Array.from({ length: 14 }, (_, index) => index);
+const musicNotes = Array.from({ length: 8 }, (_, index) => index);
 
 function ScratchDate() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -153,6 +154,8 @@ function ScratchDate() {
 
 function Invitation() {
   const [opened, setOpened] = useState(false);
+  const [dholkiPlaying, setDholkiPlaying] = useState(false);
+  const [writingName, setWritingName] = useState(false);
   const [entered, setEntered] = useState(false);
   const [muted, setMuted] = useState(true);
   const [bookPage, setBookPage] = useState(0);
@@ -251,9 +254,36 @@ function Invitation() {
 
       <section className="story-scene festive-scene" data-reveal>
         <div className="paper-florals festive-florals" aria-hidden="true"><i /><i /><i /><i /></div>
-        <div className="festive-tray" aria-hidden="true"><span className="bangle bangle-one" /><span className="bangle bangle-two" /><span className="henna-cone" /></div>
-        <button data-cursor="PLAY" className="dholki-ornament" type="button" aria-label="Play the dholki animation"><span /><span /><span /></button>
-        <div className="detail-copy festive-copy"><h2>A LITTLE MUSIC,<br />A LITTLE MEHNDI...</h2><p className="script-line">and a whole lot of happiness!</p></div>
+        <div className="festive-notes" aria-hidden="true">
+          {musicNotes.map((note) => <span key={note} className={`note note-${note + 1}`}>{note % 2 === 0 ? "♪" : "♫"}</span>)}
+        </div>
+        <div className="festive-stack">
+          <div className="detail-copy festive-copy"><h2>A LITTLE MUSIC,<br />A LITTLE MEHNDI...</h2><p className="script-line">and a whole lot of happiness!</p></div>
+          <div className={`mehndi-signature-center ${writingName ? "is-writing" : ""}`} aria-hidden="true">
+            {"Fizza's Mehndi".split("").map((letter, index) => (
+              <span key={index} className="mehndi-letter" style={{ "--i": index } as CSSProperties}>{letter === " " ? "\u00A0" : letter}</span>
+            ))}
+          </div>
+          <div className="festive-cluster">
+            <span className="dholki-hint" aria-hidden="true">✦ Tap to play ✦</span>
+            <div className={`festive-tray ${writingName ? "is-writing" : ""}`} aria-hidden="true">
+              <span className="bangle bangle-one" /><span className="bangle bangle-two" /><span className="henna-cone" />
+            </div>
+            <button
+              data-cursor="PLAY"
+              className={`dholki-ornament ${dholkiPlaying ? "is-playing" : ""}`}
+              type="button"
+              aria-label="Tap to play the dholki and see Fizza's mehndi"
+              onClick={() => {
+                if (writingName) return;
+                setDholkiPlaying(true);
+                setWritingName(true);
+                window.setTimeout(() => setDholkiPlaying(false), 1400);
+                window.setTimeout(() => setWritingName(false), 5000);
+              }}
+            ><span /><span /><span /></button>
+          </div>
+        </div>
       </section>
 
       <section className="story-scene letter-scene" data-reveal>
@@ -345,7 +375,7 @@ function Invitation() {
         <div className="scene-background"><img src={twilightImage} alt="A glowing pastel Mehndi pavilion at twilight" width={1280} height={1536} loading="lazy" /></div>
         <div className="detail-copy finale-copy">
           <h2>FIZZA <i>&</i> ABDUL QADIR</h2><p className="eyebrow">OUR MEHNDI</p><p className="final-date">{EVENT.date} · {EVENT.time}</p>
-          <p className="script-line">We can't wait to celebrate with you!</p><p>With love, Fizza & Abdul Qadir.</p>
+          <p className="script-line">We can't wait to celebrate with you!</p><p>With love.</p>
           <div className="socials"><span>LET'S STAY CONNECTED</span><div>
             <a href={EVENT.instagramUrl} target="_blank" onClick={(event) => EVENT.instagramUrl === "#" && event.preventDefault()} aria-label="Instagram"><Instagram /> INSTAGRAM</a>
             <a href={EVENT.whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><MessageCircle /> WHATSAPP</a>
