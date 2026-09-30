@@ -125,7 +125,7 @@ function ScratchDate() {
     }
   };
 
-  return (
+ return (
     <div className={`scratch-date ${revealed ? "is-revealed" : ""}`}>
       <div className="date-values">
         <span className="date-day">{EVENT.dateDay}</span>
@@ -151,17 +151,15 @@ function ScratchDate() {
     </div>
   );
 }
-
+ 
 function Invitation() {
   const [opened, setOpened] = useState(false);
-  const [dholkiPlaying, setDholkiPlaying] = useState(false);
-  const [writingName, setWritingName] = useState(false);
   const [entered, setEntered] = useState(false);
   const [muted, setMuted] = useState(true);
   const [bookPage, setBookPage] = useState(0);
   const sectionsRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
-
+ 
   useEffect(() => {
     const root = sectionsRef.current;
     if (!root || !entered) return;
@@ -190,7 +188,7 @@ function Invitation() {
     }, root);
     return () => context.revert();
   }, [entered]);
-
+ 
   useEffect(() => {
     document.documentElement.classList.toggle("invitation-locked", !entered);
     document.body.classList.toggle("invitation-locked", !entered);
@@ -203,7 +201,7 @@ function Invitation() {
       document.body.classList.remove("invitation-locked");
     };
   }, [entered]);
-
+ 
   useEffect(() => {
     const cursor = cursorRef.current;
     if (!cursor || window.matchMedia("(pointer: coarse)").matches) return;
@@ -216,7 +214,7 @@ function Invitation() {
     document.addEventListener("mouseover", label);
     return () => { window.removeEventListener("mousemove", move); document.removeEventListener("mouseover", label); };
   }, []);
-
+ 
   return (
     <main ref={sectionsRef} className={`invitation-shell ${entered ? "has-entered" : "is-locked"}`}>
       {!entered && <section className={`gate-scene ${opened ? "is-open" : ""}`} aria-label="Welcome to the Mehndi celebration">
@@ -239,53 +237,23 @@ function Invitation() {
           Step inside
         </button>
       </section>}
-
+ 
       {entered && <div className="invitation-content">
       <section id="hero" className="story-scene couple-scene" data-reveal>
         <div className="scene-background couple-layer"><img src={coupleImage} alt="Fizza and Abdul Qadir in a pastel Mehndi garden" width={1280} height={1536} /></div>
         <div className="detail-copy hero-copy">
-          <p className="eyebrow">TO OUR DEAREST FAMILY & FRIENDS</p>
-          <p className="hero-intro">With hearts full of joy and love,<br />we invite you to celebrate our Mehndi.</p>
-          <h2><span>FIZZA</span><i>&</i><span>ABDUL QADIR</span></h2>
-          <p className="eyebrow">OUR MEHNDI CELEBRATION</p>
-          <p>An evening of music, laughter, love and memories we will cherish forever.</p>
+          <h2><span>ABDUL QADIR</span><i>&</i><span>FIZZA</span></h2>
+          <p className="hero-intro">together with their families<br />invite you to celebrate their Mehendi.</p>
         </div>
       </section>
-
+ 
       <section className="story-scene festive-scene" data-reveal>
         <div className="paper-florals festive-florals" aria-hidden="true"><i /><i /><i /><i /></div>
-        <div className="festive-notes" aria-hidden="true">
-          {musicNotes.map((note) => <span key={note} className={`note note-${note + 1}`}>{note % 2 === 0 ? "♪" : "♫"}</span>)}
-        </div>
-        <div className="festive-stack">
-          <div className="detail-copy festive-copy"><h2>A LITTLE MUSIC,<br />A LITTLE MEHNDI...</h2><p className="script-line">and a whole lot of happiness!</p></div>
-          <div className={`mehndi-signature-center ${writingName ? "is-writing" : ""}`} aria-hidden="true">
-            {"Fizza's Mehndi".split("").map((letter, index) => (
-              <span key={index} className="mehndi-letter" style={{ "--i": index } as CSSProperties}>{letter === " " ? "\u00A0" : letter}</span>
-            ))}
-          </div>
-          <div className="festive-cluster">
-            <span className="dholki-hint" aria-hidden="true">✦ Tap to play ✦</span>
-            <div className={`festive-tray ${writingName ? "is-writing" : ""}`} aria-hidden="true">
-              <span className="bangle bangle-one" /><span className="bangle bangle-two" /><span className="henna-cone" />
-            </div>
-            <button
-              data-cursor="PLAY"
-              className={`dholki-ornament ${dholkiPlaying ? "is-playing" : ""}`}
-              type="button"
-              aria-label="Tap to play the dholki and see Fizza's mehndi"
-              onClick={() => {
-                if (writingName) return;
-                setDholkiPlaying(true);
-                setWritingName(true);
-                window.setTimeout(() => setDholkiPlaying(false), 1400);
-                window.setTimeout(() => setWritingName(false), 5000);
-              }}
-            ><span /><span /><span /></button>
-          </div>
-        </div>
+        <div className="festive-tray" aria-hidden="true"><span className="bangle bangle-one" /><span className="bangle bangle-two" /><span className="henna-cone" /></div>
+        <button data-cursor="PLAY" className="dholki-ornament" type="button" aria-label="Play the dholki animation"><span /><span /><span /></button>
+        <div className="detail-copy festive-copy"><h2>A LITTLE MUSIC,<br />A LITTLE MEHNDI...</h2><p className="script-line">and a whole lot of happiness!</p></div>
       </section>
-
+ 
       <section className="story-scene letter-scene" data-reveal>
         <div className="silk-fold" aria-hidden="true" />
         <div className="paper-florals letter-florals" aria-hidden="true"><i /><i /><i /></div>
@@ -297,7 +265,7 @@ function Invitation() {
           <p className="script-line">With love,<br />Fizza & Abdul Qadir</p>
         </div>
       </section>
-
+ 
       <section id="date" className="story-scene date-scene" data-reveal>
         <div className="decorative-layer" aria-hidden="true">
           <span className="date-frame" /><span className="bud bud-one" /><span className="bud bud-two" />
@@ -308,7 +276,7 @@ function Invitation() {
           <p className="script-line">One beautiful evening, a lifetime of lovely memories.</p>
         </div>
       </section>
-
+ 
       <section id="time" className="story-scene time-scene" data-reveal>
         <div className="sunset-field" aria-hidden="true"><span className="sun-disc" /><span className="organza-line organza-one" /><span className="organza-line organza-two" /></div>
         <div className="horizon-glow" aria-hidden="true" />
@@ -320,7 +288,7 @@ function Invitation() {
           <p>Join us for an evening filled with love, laughter and Mehndi magic.</p>
         </div>
       </section>
-
+ 
       <section id="venue" className="story-scene venue-scene" data-reveal>
         <div className="scene-background venue-layer"><img src={venueImage} alt="A flower-lined garden path leading to an elegant Mehndi pavilion" width={1280} height={1536} loading="lazy" /></div>
         <div className="venue-arch" aria-hidden="true"><span /><span /></div>
@@ -335,7 +303,7 @@ function Invitation() {
           </a>
         </div>
       </section>
-
+ 
       <section className="mood-scene story-scene" data-reveal>
         <div className="mood-heading"><p className="eyebrow">A LITTLE BOOK OF</p><h2>Beautiful Details</h2></div>
         <div className="book-wrap" data-cursor="TURN PAGE" onTouchStart={(event) => { const touch = event.touches.item(0); if (touch) event.currentTarget.dataset["startX"] = String(touch.clientX); }} onTouchEnd={(event) => {
@@ -357,7 +325,7 @@ function Invitation() {
         </div>
         <div className="page-dots" aria-label={`Mood book page ${bookPage + 1} of 3`}>{[0,1,2].map((page) => <button key={page} type="button" className={bookPage === page ? "active" : ""} onClick={() => setBookPage(page)} aria-label={`Go to page ${page + 1}`} />)}</div>
       </section>
-
+ 
       <section className="editorial-scene" data-reveal>
         <header className="editorial-heading"><p className="eyebrow">MOMENTS IN BLOOM</p><h2>A celebration,<br /><i>beautifully imagined</i></h2></header>
         <figure className="editorial-large"><img src={coupleImage} alt="A pastel Mehndi garden dreamscape" width={1280} height={1536} loading="lazy" /><figcaption>Love, dressed in colour</figcaption></figure>
@@ -365,19 +333,19 @@ function Invitation() {
         <figure className="editorial-small two"><img src={jewelsImage} alt="Pastel bangles and traditional jewellery" width={1024} height={1280} loading="lazy" /><figcaption>Little glimmers of joy</figcaption></figure>
         <p className="editorial-note">A day composed in petals, music and the softest light.</p>
       </section>
-
+ 
       <section className="story-scene focus-scene" data-reveal>
         <div className="scene-background focus-layer"><img src={focusImage} alt="A garden pavilion emerging through a soft organza veil" width={1280} height={1536} loading="lazy" /></div>
         <div className="detail-copy focus-copy"><p className="eyebrow">AND JUST LIKE THAT...</p><h2>A BEAUTIFUL<br />MEMORY BEGINS.</h2></div>
       </section>
-
+ 
       <section className="story-scene finale-scene" data-reveal>
         <div className="scene-background"><img src={twilightImage} alt="A glowing pastel Mehndi pavilion at twilight" width={1280} height={1536} loading="lazy" /></div>
         <div className="detail-copy finale-copy">
-          <h2>FIZZA <i>&</i> ABDUL QADIR</h2><p className="eyebrow">OUR MEHNDI</p><p className="final-date">{EVENT.date} · {EVENT.time}</p>
-          <p className="script-line">We can't wait to celebrate with you!</p><p>With love.</p>
+          <h2>ABDUL QADIR <i>&</i> FIZZA</h2><p className="final-date">{EVENT.date} · {EVENT.time}</p>
+          <p className="script-line">An evening of love, laughter, music & memories awaits.</p><p>We’d be delighted to have you celebrate with us.</p>
           <div className="socials"><span>LET'S STAY CONNECTED</span><div>
-            <a href={EVENT.instagramUrl} target="_blank" onClick={(event) => EVENT.instagramUrl === "#" && event.preventDefault()} aria-label="Instagram"><Instagram /> INSTAGRAM</a>
+            <a href={EVENT.instagramUrl} onClick={(event) => EVENT.instagramUrl === "#" && event.preventDefault()} aria-label="Instagram"><Instagram /> INSTAGRAM</a>
             <a href={EVENT.whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><MessageCircle /> WHATSAPP</a>
           </div></div>
         </div>
@@ -387,3 +355,4 @@ function Invitation() {
     </main>
   );
 }
+ 
