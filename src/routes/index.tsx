@@ -345,7 +345,7 @@ function Invitation() {
           <h2>ABDUL QADIR <i>&</i> FIZZA</h2><p className="final-date">{EVENT.date} · {EVENT.time}</p>
           <p className="script-line">An evening of love, laughter, music & memories awaits.</p><p>We’d be delighted to have you celebrate with us.</p>
           <div className="socials"><span>LET'S STAY CONNECTED</span><div>
-            <a href={EVENT.instagramUrl} onClick={(event) => EVENT.instagramUrl === "#" && event.preventDefault()} aria-label="Instagram"><Instagram /> INSTAGRAM</a>
+            <a href={EVENT.instagramUrl} target="_blank" onClick={(event) => EVENT.instagramUrl === "#" && event.preventDefault()} aria-label="Instagram"><Instagram /> INSTAGRAM</a>
             <a href={EVENT.whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><MessageCircle /> WHATSAPP</a>
           </div></div>
         </div>
