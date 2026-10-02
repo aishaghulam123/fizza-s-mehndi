@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, Instagram, MapPin, MessageCircle, Volume2, V
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { useInvitationSong } from "@/hooks/use-invitation-song";
 import gateImage from "@/assets/mehndi-garden-gate.jpg";
 import venueImage from "@/assets/secret-garden-venue.jpg";
 import coupleImage from "@/assets/couple-dreamscape.jpg";
@@ -153,9 +154,12 @@ function ScratchDate() {
 }
  
 function Invitation() {
-  const [opened, setOpened] = useState(false);
+ const [opened, setOpened] = useState(false);
+  const [dholkiPlaying, setDholkiPlaying] = useState(false);
+  const [writingName, setWritingName] = useState(false);
   const [entered, setEntered] = useState(false);
-  const [muted, setMuted] = useState(true);
+  const song = useInvitationSong("mehndi");
+  const muted = !song.playing;
   const [bookPage, setBookPage] = useState(0);
   const sectionsRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
@@ -221,23 +225,28 @@ function Invitation() {
         <img src={gateImage} alt="A flower-covered garden gate opening onto a celebration pavilion" width={1280} height={1536} className="scene-image" />
         <div className="gate-shade" aria-hidden="true" />
         {petals.map((petal) => <span key={petal} className={`petal petal-${petal + 1}`} aria-hidden="true" />)}
-        <button className="sound-control" type="button" onClick={() => setMuted((value) => !value)} aria-label={muted ? "Turn sound on" : "Turn sound off"}>
+        {song.ready && <button className="sound-control" type="button" onClick={song.toggle} aria-label={muted ? "Turn sound on" : "Turn sound off"}>
           {muted ? <VolumeX /> : <Volume2 />}
-        </button>
+        </button>}
         <div className="gate-copy">
           <p className="script-line">psst... something beautiful is waiting for you!</p>
           <h1>A LITTLE <span>Mehndi</span> MAGIC</h1>
           <p className="eyebrow">RING THE BELL TO ENTER</p>
         </div>
-        <button data-cursor="ENTER" className="doorbell" type="button" onClick={() => setOpened(true)} aria-label="Ring the bell and open the garden gate">
-          <span className="bell-dot" aria-hidden="true" />
+ <button data-cursor="ENTER" className="doorbell" type="button" onClick={() => { setOpened(true); song.start(); }} aria-label="Ring the bell and open the garden gate">
+            <span className="bell-dot" aria-hidden="true" />
           <span>{opened ? "WELCOME IN" : "RING FOR JOY"}</span>
         </button>
-        <button className="enter-button" type="button" onClick={() => setEntered(true)}>
+        <button className="enter-button" type="button" onClick={() => { setEntered(true); song.start(); }}>
           Step inside
         </button>
       </section>}
  
+ {entered && song.ready && <button className={`sound-fab ${song.playing ? "playing" : ""}`} type="button" onClick={song.toggle} data-cursor={muted ? "PLAY" : "PAUSE"} aria-label={muted ? "Turn sound on" : "Turn sound off"}>
+        {muted ? <VolumeX /> : <Volume2 />}
+      </button>}
+
+
       {entered && <div className="invitation-content">
       <section id="hero" className="story-scene couple-scene" data-reveal>
         <div className="scene-background couple-layer"><img src={coupleImage} alt="Fizza and Abdul Qadir in a pastel Mehndi garden" width={1280} height={1536} /></div>
@@ -248,11 +257,36 @@ function Invitation() {
       </section>
  
       <section className="story-scene festive-scene" data-reveal>
-        <div className="paper-florals festive-florals" aria-hidden="true"><i /><i /><i /><i /></div>
-        <div className="festive-tray" aria-hidden="true"><span className="bangle bangle-one" /><span className="bangle bangle-two" /><span className="henna-cone" /></div>
-        <button data-cursor="PLAY" className="dholki-ornament" type="button" aria-label="Play the dholki animation"><span /><span /><span /></button>
-        <div className="detail-copy festive-copy"><h2>A LITTLE MUSIC,<br />A LITTLE MEHNDI...</h2><p className="script-line">and a whole lot of happiness!</p></div>
-      </section>
+          <div className="festive-notes" aria-hidden="true">
+          {musicNotes.map((note) => <span key={note} className={`note note-${note + 1}`}>{note % 2 === 0 ? "♪" : "♫"}</span>)}
+        </div>
+        <div className="festive-stack">
+          <div className="detail-copy festive-copy"><h2>A LITTLE MUSIC,<br />A LITTLE MEHNDI...</h2><p className="script-line">and a whole lot of happiness!</p></div>
+          <div className={`mehndi-signature-center ${writingName ? "is-writing" : ""}`} aria-hidden="true">
+            {"Fizza's Mehndi".split("").map((letter, index) => (
+              <span key={index} className="mehndi-letter" style={{ "--i": index } as CSSProperties}>{letter === " " ? "\u00A0" : letter}</span>
+            ))}
+          </div>
+          <div className="festive-cluster">
+            <span className="dholki-hint" aria-hidden="true">✦ Tap to play ✦</span>
+            <div className={`festive-tray ${writingName ? "is-writing" : ""}`} aria-hidden="true">
+              <span className="bangle bangle-one" /><span className="bangle bangle-two" /><span className="henna-cone" />
+            </div>
+            <button
+              data-cursor="PLAY"
+              className={`dholki-ornament ${dholkiPlaying ? "is-playing" : ""}`}
+              type="button"
+              aria-label="Tap to play the dholki and see Fizza's mehndi"
+              onClick={() => {
+                if (writingName) return;
+                setDholkiPlaying(true);
+                setWritingName(true);
+                window.setTimeout(() => setDholkiPlaying(false), 1400);
+                window.setTimeout(() => setWritingName(false), 5000);
+              }}
+            ><span /><span /><span /></button>
+          </div>
+        </div></section>
  
       <section className="story-scene letter-scene" data-reveal>
         <div className="silk-fold" aria-hidden="true" />
